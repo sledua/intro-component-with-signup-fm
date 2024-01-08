@@ -1,37 +1,34 @@
-// Get all input elements
-const inputs = document.querySelectorAll('input');
-
-// Add click event listener to each input
-inputs.forEach(input => {
-    
-    input.addEventListener('click', () => {
-        
-        // Print the active input
-        console.log(`Active input: ${input.id}`);
-        // Perform validation in camel case style
-        const isValid = validateInput(input);
-        if (isValid) {
-            // Input is valid, apply appropriate styling
-            input.classList.remove('invalid');
-            input.classList.add('valid');
-        } else {
-            // Input is invalid, apply appropriate styling
-            // input.classList.remove('valid');
-            input.classList.add('error');
-            // document.getElementById(input).style.opacity = 1;
-            
-        }
-    });
-});
-
-// Function to validate input
-function validateInput(input) {
-    // Perform validation logic here
-    // Return true if input is valid, false otherwise
-    // Example validation logic:
-    if (input.value.trim() === '') {
-        return false;
+const inputs = document.querySelectorAll("input");
+inputs.forEach((input) => {
+  input.addEventListener("click", () => {
+    if (input.id) {
+      const label = document.querySelector(`label[for="${input.id}"]`);
+      if (input.type === "text" || input.type === "password") {
+        input.addEventListener("input", () => {
+          const words = input.value.trim().split(" ").toString();
+          if (words.length <= 8) {
+            label.style.opacity = 1;
+            input.style.color = "red";
+            input.classList.add("error");
+          } else {
+            label.style.opacity = 0;
+            input.style.color = "black";
+            input.classList.remove("error");
+          }
+        });
+      }
+      if (input.type === "email") {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        input.addEventListener("input", () => {
+          if (!emailRegex.test(input.value)) {
+            label.style.opacity = 1;
+            input.classList.add("error");
+          } else {
+            label.style.opacity = 0;
+            input.classList.remove("error");
+          }
+        });
+      }
     }
-    return true;
-}
-
+  });
+});
